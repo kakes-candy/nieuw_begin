@@ -1,0 +1,153 @@
+---
+title: "Opzet data structuur"
+output: html_document
+---
+
+
+### Dossiers
+
+* bsn (key) 
+* dossierid (key) 
+* type (BGGZ, DBC, privaat) 
+* zorgtrajectid (key)
+* dbcid (key)
+* bggzid (key)
+* status, UZOVI (key),
+* aanmelddatum
+* registratiedatum
+* startdatum
+* minimale functie HB
+* HB onderzoek pers nr (key)
+* HB behandeling pers_nr (key)
+* vestiging
+* dossiersluitreden
+* verwijzerid/agb
+* klant
+* convenant
+* heropend
+
+
+### DBC_trajecten
+
+* dossierid (key)
+* zorgtrajectid (key)
+* dbcid (key)
+* startdatum
+* einddatum
+* status
+* zorgtype
+* prestatiecode
+* productgroep
+* afsluitreden
+
+### BGGZ_trajecten
+
+* dossierid (key)
+* bggzid (key)
+* startdatum
+* einddatum
+* status
+* ZVZ_initieel
+* ZVZ_actueel
+* afsluitreden
+
+### Diagnoses
+
+* dossierid (key)
+* diagnosecode
+* diagnosebeschrijving
+* as
+* diagnosedatum
+* primaire diagnose
+* niveau (trekken van/ aanwezig)
+
+### Activiteiten
+* dossierid (key)
+* productid (key)
+* sessieid (key)
+* status
+* datum
+* sessienaam
+* uitvoerder_pers_nr (key)
+* tijd_direct, tijd_indirect
+* tijd_uitwerk
+* DBC_activiteit_code
+* BGGZ_activiteit_code
+* F_code
+* ctg_code
+* locatie
+* is_slotsessie
+
+
+### Producten
+* dossierid (key)
+* productid (key)
+* status
+* aanvrager_pers_nr (key)
+* startdatum_product
+* einddatum_product
+* type
+
+### Declaraties
+* dossierid (key)
+* declaratieid
+* datum
+* type (C of D) 
+* gedeclareerdbedrag
+* toegekendbedrag
+* status
+* retourinfo
+
+### Facturen
+
+### Sessieresultaten
+* sessieid (key)
+* datum
+* type
+* score 
+
+### Verwijzers/contactpersonen
+* id (?)
+* voornaam
+* achternaam
+* tussenvoegsels
+* beroep
+* rol
+* AGB
+
+### Clienten
+* bsn (key)
+* client_id (key)
+* voornaam
+* tussenvoegsels
+* achternaam
+* woonplaats
+* straat
+* huisnummer
+* postcode
+* email
+* telefoonnr
+
+### Professionals
+* Personeelsnummer (key)
+* voornaam
+* tussenvoegsels
+* achternaam
+* specialisatie (beroepcode CONO) (key)
+* ingangsdatum specialisatie
+* agbcode
+* datum in dienst
+* datum uit dienst 
+
+### Regios 
+* Vestiging (key)
+* Regio
+* Regiomanager
+* Servicedesk
+
+### Specialisaties
+* Beroepcode Cono (key)
+* naam beroep weCare
+* ingangsdatum
+* einddatum
+* rangorde 
