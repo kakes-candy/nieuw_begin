@@ -1,6 +1,5 @@
 num <- "numeric"; txt = "text"; date = "date"; blank = "blank" 
 
-
 # Kolomspecificaties bggz_traject_onderhanden_werk ----------------------------------------------------------------
 
 colspecs_bggz_traject <- c(
@@ -36,7 +35,9 @@ colspecs_bggz_traject <- c(
       IngangsdatumAgbCodebehandelaar = txt,
       IngangsdatumAgbCodeonderzoeker = txt,
       behandelaarlaatstesessie = txt,
-      primaire_diagnose = txt )
+      primaire_diagnose = txt, 
+      startjaarbggz = num,
+      eindjaarbggz = num )
 
 
 

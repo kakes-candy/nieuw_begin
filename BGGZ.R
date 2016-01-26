@@ -31,13 +31,22 @@ library(readxl)
 
 # Data inlezen ----------------------------------------------------------------------------------------------------
 
+
+
 # Er zijn verschillende databestanden relevant, welke hier worden ingelezen
 
+# Specifcaties voor de kolommen
+source(file = "kolomspecificaties.R")
+
+
 # trajecten
-bggz_traject <- read_excel(path = paste0(my_setwd(set = FALSE), "/", "Data", "/", "bggz_traject_onderhanden_werk.xlsx"))
+bggz_traject <- read_excel(path = paste0(my_setwd(set = FALSE), "/", "Data", "/", "bggz_traject_onderhanden_werk.xlsx"), 
+                           col_types = colspecs_bggz_traject)
 
 # sessies
-bggz_sessies <- read_excel(path = paste0(my_setwd(set = FALSE), "/", "Data", "/", "BGGZ_Onderhanden_Werk.xlsx"))
+bggz_sessies <- read_excel(path = paste0(my_setwd(set = FALSE), "/", "Data", "/", "BGGZ_Onderhanden_Werk.xlsx"),
+                           col_types = colspecs_bggz_sessies)
+
 
 
 
@@ -71,18 +80,27 @@ bggz_sessies <- bggz_sessies %>%
 # Datums ----------------------------------------------------------------------------------------------------------
 
 # kolommem met datums in trajectenbestand
-datums <- c(which(names(bggz_traject) %in% c("laatst_uitgevoerde_BGGZ_sessie")),
+datums <- c(which(names(bggz_traject) %in% c("laatst_geplande_BGGZ_sessie", "laatst_uitgevoerde_BGGZ_sessie")),
             which(grepl("[Dd]atum", names(bggz_traject))))
 
-
+# datums converteren
 bggz_traject[, datums] <- lapply(bggz_traject[, datums], dmy)
 
 
 # kolommen met datums in sessiebestand
-datums <- c(which(grepl("[Dd]atum", names(bggz_traject))))
+datums <- c(which(grepl("[Dd]atum", names(bggz_sessies))))
 
+# datums converteren
 bggz_sessies[, datums] <- lapply(bggz_sessies[, datums], dmy)
 
+
+
+
+# kolommen opschonen traject --------------------------------------------------------------------------------------
+
+trajecten_bggz <- bggz_traject %>% 
+      select(bsn = BurgerServiceNummer, dossierid = Dossierid, bggzid = basisggztrajectid, startdatum = startjaarbggz, 
+             einddatum = einddatumbggz, zvz_initieel = ZorgvraagzwaarteInitieel, zvz_actueel = ZorgvraagzwaarteActueel)
 
 
 
