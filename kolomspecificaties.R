@@ -1,0 +1,70 @@
+num <- "numeric"; txt = "text"; date = "date"; blank = "blank" 
+
+
+# Kolomspecificaties bggz_traject_onderhanden_werk ----------------------------------------------------------------
+
+colspecs_bggz_traject <- c(
+      Dossierid = txt,
+      basisggztrajectid = txt ,
+      naam = txt,
+      Geboortedatum = txt,
+      BurgerServiceNummer = txt,
+      declarant = txt,
+      startdatumbggz = txt,
+      einddatumbggz = txt,
+      ZorgvraagzwaarteInitieel = txt,
+      ZorgvraagzwaarteActueel = txt,
+      ZorgverzekeraarVorigJaar = txt,
+      ZorgverzekeraarHuidigJaar = txt,
+      duur = num,
+      Uitwerktijdduur = num,
+      IndirecteTijd = num,
+      vestiging = txt,
+      bggztrajectstatus = txt,
+      totale_tijdsbesteding = num,
+      totale_tijdsbesteding_geslotentrajecten = num,
+      dossieringangsdatum = txt,
+      laatst_geplande_BGGZ_sessie = txt,
+      laatst_uitgevoerde_BGGZ_sessie = txt,
+      HoofdbehandelaarOnderzoek = txt,
+      HoofdbehandelaarBehandeling = txt,
+      MinimaleFunctie = txt,
+      HoofdbehandelaarOnderzoekfunctie = txt,
+      HoofdbehandelaarBehandelingfunctie = txt,
+      AGBCodeHBbehandeling = txt,
+      AGBCodeHBonderzoek = txt,
+      IngangsdatumAgbCodebehandelaar = txt,
+      IngangsdatumAgbCodeonderzoeker = txt,
+      behandelaarlaatstesessie = txt,
+      primaire_diagnose = txt )
+
+
+
+# kolomspecificaties BGGZ_Onderhanden_Werk ------------------------------------------------------------------------
+
+colspecs_bggz_sessies <- c(
+      Dossierid = txt,
+      basisggztrajectid = txt,
+      naam = txt,
+      Geboortedatum = txt,
+      BurgerServiceNummer = txt,
+      declarant = txt,
+      startdatumbggz = txt,
+      einddatumbggz = txt,
+      ZorgvraagzwaarteInitieel = txt,
+      ZorgvraagzwaarteActueel = txt,
+      ZorgverzekeraarVorigJaar = txt,
+      ZorgverzekeraarHuidigJaar = txt,
+      productnaam = txt,
+      starttijd = date,
+      duur = num,
+      UitwerktijdDuur = num,
+      IndirecteTijd = num,
+      Sessiestatus = txt,
+      vestiging = txt,
+      bggztrajectstatus = txt,
+      sessie_id = txt,
+      totale_tijdsbesteding = num,
+      totale_tijdsbesteding_geslotentrajecten = num,
+      sessienaam = txt,
+      Therapeut = txt)
