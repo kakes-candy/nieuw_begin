@@ -12,10 +12,12 @@ output: html_document
 * zorgtrajectid (key)
 * dbcid (key)
 * bggzid (key)
-* status, UZOVI (key),
-* aanmelddatum
+* status 
+* UZOVI (key)
 * registratiedatum
+* aanmelddatum
 * startdatum
+* einddatum
 * minimale functie HB
 * HB onderzoek pers nr (key)
 * HB behandeling pers_nr (key)
@@ -49,7 +51,7 @@ output: html_document
 * status
 * ZVZ_initieel
 * ZVZ_actueel
-* afsluitreden
+* afsluitreden (niet in queries(verkeerd in DBCGGZuitvraag) , moet uit decl. bericht komen)
 
 ### Diagnoses
 
@@ -69,7 +71,8 @@ output: html_document
 * datum
 * sessienaam
 * uitvoerder_pers_nr (key)
-* tijd_direct, tijd_indirect
+* tijd_direct 
+* tijd_indirect
 * tijd_uitwerk
 * DBC_activiteit_code
 * BGGZ_activiteit_code
