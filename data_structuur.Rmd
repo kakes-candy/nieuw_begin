@@ -1,6 +1,6 @@
 ---
 title: "Opzet data structuur"
-output: html_document
+output: word_document
 ---
 
 
@@ -137,7 +137,7 @@ output: html_document
 * tussenvoegsels
 * achternaam
 * specialisatie (beroepcode CONO) (key)
-* ingangsdatum specialisatie
+* ingangsdatum specialisatie (uit pers. administratie)
 * agbcode
 * datum in dienst
 * datum uit dienst 

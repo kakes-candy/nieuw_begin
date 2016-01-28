@@ -36,7 +36,7 @@ library(readxl)
 # Er zijn verschillende databestanden relevant, welke hier worden ingelezen
 
 # Specifcaties voor de kolommen
-source(file = "kolomspecificaties.R")
+source(file = "kolomspecificaties_BGGZ.R")
 
 
 # trajecten
@@ -99,8 +99,50 @@ bggz_sessies[, datums] <- lapply(bggz_sessies[, datums], dmy)
 # kolommen opschonen traject --------------------------------------------------------------------------------------
 
 trajecten_bggz <- bggz_traject %>% 
-      select(bsn = BurgerServiceNummer, dossierid = Dossierid, bggzid = basisggztrajectid, startdatum = startjaarbggz, 
-             einddatum = einddatumbggz, zvz_initieel = ZorgvraagzwaarteInitieel, zvz_actueel = ZorgvraagzwaarteActueel)
+      select(bsn = BurgerServiceNummer, startdatum = startdatumbggz, einddatum = einddatumbggz, 
+             zvz_initieel = ZorgvraagzwaarteInitieel, zvz_actueel = ZorgvraagzwaarteActueel, 
+             dossierid = Dossierid, bggzid = basisggztrajectid) %>% 
+      as.data.table()
+
+
+# kolommen opschonen sessies --------------------------------------------------------------------------------------
+
+sessies_bggz <- bggz_sessies %>% 
+      select(sessiedatum = starttijd, sessienaam, sessiestatus = Sessiestatus, behandelaar = Therapeut, 
+             tijd_direct = duur, tijd_indirect = IndirecteTijd, tijd_uitwerk = UitwerktijdDuur, 
+             dossierid = Dossierid, bggzid = basisggztrajectid, sessieid = sessie_id) %>% 
+      as.data.table()
+
+
+# aanvullen -------------------------------------------------------------------------------------------------------
+
+# Om de een of andere reden is de verzekeraar vastgelegd op sessieniveau, 
+# maar niet op dossierniveau. 
+# Eerst apart zetten
+uzovi <- bggz_sessies %>% 
+      distinct(Dossierid) %>% 
+      select(dossierid = Dossierid, uzovi = ZorgverzekeraarHuidigJaar) %>% 
+      as.data.table()
+# dan samenvoegen
+trajecten_bggz <- merge(trajecten_bggz, uzovi, by = "dossierid", all.x = TRUE)
+
+# dan lijst weer weggooien
+rm(uzovi)
+
+
+# Het is handig om per traject te kunnen zien hoeveel tijd er is geschreven. 
+# onderverdeeld in uitgevoerde sessies en geplande
+tijden <- sessies_bggz %>%
+      mutate(status = ifelse(sessiestatus ==  "Uitgevoerd", "tijd_totaal", "tijd_totaal_planning")) %>% 
+      group_by(dossierid, status) %>% 
+      summarize(tijd = sum(tijd_direct + tijd_indirect + tijd_uitwerk)) %>% 
+      spread(key = status, value = tijd, fill = 0)
+
+# toevoegen aan trajecten
+trajecten_bggz <- merge(trajecten_bggz, tijden, by = "dossierid", all.x = TRUE)
+
+# dan lijst weer weggooien
+rm(tijden)
 
 
 
