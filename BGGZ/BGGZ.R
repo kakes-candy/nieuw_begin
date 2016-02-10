@@ -29,6 +29,13 @@ library(readxl)
 
 
 
+# Instellingen ------------------------------------------------------------
+
+# bronmap instellen
+root <- paste0(my_setdropbox("scripts"), "/00 Werkmap/00 nieuw begin/")
+
+
+
 # Data inlezen ----------------------------------------------------------------------------------------------------
 
 
@@ -36,7 +43,7 @@ library(readxl)
 # Er zijn verschillende databestanden relevant, welke hier worden ingelezen
 
 # Specifcaties voor de kolommen
-source(file = "kolomspecificaties_BGGZ.R")
+source(file = paste0(root, "BGGZ/", "kolomspecificaties_BGGZ.R"))
 
 
 # trajecten
@@ -143,6 +150,12 @@ trajecten_bggz <- merge(trajecten_bggz, tijden, by = "dossierid", all.x = TRUE)
 
 # dan lijst weer weggooien
 rm(tijden)
+
+
+# Opslaan -----------------------------------------------------------------
+save()
+
+
 
 
 
