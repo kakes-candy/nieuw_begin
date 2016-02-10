@@ -107,7 +107,7 @@ bggz_sessies[, datums] <- lapply(bggz_sessies[, datums], dmy)
 
 trajecten_bggz <- bggz_traject %>% 
       select(bsn = BurgerServiceNummer, startdatum = startdatumbggz, einddatum = einddatumbggz, 
-             zvz_initieel = ZorgvraagzwaarteInitieel, zvz_actueel = ZorgvraagzwaarteActueel, 
+             bggztrajectstatus, zvz_initieel = ZorgvraagzwaarteInitieel, zvz_actueel = ZorgvraagzwaarteActueel, 
              dossierid = Dossierid, bggzid = basisggztrajectid) %>% 
       as.data.table()
 
@@ -130,6 +130,7 @@ uzovi <- bggz_sessies %>%
       distinct(Dossierid) %>% 
       select(dossierid = Dossierid, uzovi = ZorgverzekeraarHuidigJaar) %>% 
       as.data.table()
+
 # dan samenvoegen
 trajecten_bggz <- merge(trajecten_bggz, uzovi, by = "dossierid", all.x = TRUE)
 
@@ -137,24 +138,52 @@ trajecten_bggz <- merge(trajecten_bggz, uzovi, by = "dossierid", all.x = TRUE)
 rm(uzovi)
 
 
-# Het is handig om per traject te kunnen zien hoeveel tijd er is geschreven. 
-# onderverdeeld in uitgevoerde sessies en geplande
-tijden <- sessies_bggz %>%
-      mutate(status = ifelse(sessiestatus ==  "Uitgevoerd", "tijd_totaal", "tijd_totaal_planning")) %>% 
-      group_by(dossierid, status) %>% 
-      summarize(tijd = sum(tijd_direct + tijd_indirect + tijd_uitwerk)) %>% 
-      spread(key = status, value = tijd, fill = 0)
 
-# toevoegen aan trajecten
-trajecten_bggz <- merge(trajecten_bggz, tijden, by = "dossierid", all.x = TRUE)
 
-# dan lijst weer weggooien
-rm(tijden)
+# Een code voor de productgroep toevoegen, obv de zvz actueel
+# Als de zvz initieel is gevuld, maar de zvz actueel niet, dan initeel overnemen
+trajecten_bggz <- trajecten_bggz %>% 
+      mutate(zvz_actueel =  ifelse(is.na(zvz_actueel) & 
+                                         bggztrajectstatus != "Open" & 
+                                         year(startdatum) == 2015, 
+                                   "Onvolledig behandeltraject" , zvz_actueel), 
+             productgroep = ifelse(grepl("[Oo]nvolledig", zvz_actueel), 180005, NA), 
+             productgroep = ifelse(grepl("Kort", zvz_actueel), 180001, productgroep),
+             productgroep = ifelse(grepl("Midden", zvz_actueel), 180002, productgroep), 
+             productgroep = ifelse(grepl("Intensief", zvz_actueel), 180003, productgroep), 
+             productgroep = ifelse(grepl("depressie", zvz_actueel), 40024, productgroep), 
+             productgroep = ifelse(grepl("angst", zvz_actueel), 40025, productgroep),
+             productgroep = ifelse(grepl("somatoform", zvz_actueel), 40026, productgroep),
+             productgroep = ifelse(grepl("verslaving", zvz_actueel), 40027, productgroep),
+             productgroep = ifelse(grepl("persoonlijkheid", zvz_actueel), 40028, productgroep),
+             productgroep = ifelse(grepl("alcohol", zvz_actueel), 40029, productgroep),
+             productgroep = ifelse(grepl("aandachtstekort", zvz_actueel), 40030, productgroep),
+             productgroep = ifelse(grepl("overige kindertijd", zvz_actueel), 40031, productgroep),
+             productgroep = ifelse(grepl("restgroep", zvz_actueel), 40032, productgroep), 
+             productgroep = ifelse(grepl("[Tt]ransitieprestatie", zvz_actueel), 180005, productgroep),
+             productgroep = ifelse(grepl("[Cc]hronisch", zvz_actueel), 180004, productgroep))
+
+
+
+
+
+
+# Opschonen -------------------------------------------------------------------------------------------------------
+
+rm(bggz_traject, bggz_sessies, colspecs_bggz_sessies, colspecs_bggz_traject)
+
 
 
 # Opslaan -----------------------------------------------------------------
-save()
 
+# Trajecten opslaan
+save(trajecten_bggz, file = paste0(my_setwd(set = FALSE), "/", "Data", "/", 
+                                   "00_Gestructureerde_data", "/", "trajecten_bggz.Rdata"))
+
+
+# BGGZ sessie opslaan, in tijdelijke map. Horen niet bij de datastructuur
+save(trajecten_bggz, file = paste0(my_setwd(set = FALSE), "/", "Data", "/", 
+                                   "00_Gestructureerde_data", "/", "temporary", "/", "trajecten_bggz.Rdata"))
 
 
 
