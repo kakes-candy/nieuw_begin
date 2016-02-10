@@ -46,11 +46,14 @@ output: word_document
 
 * dossierid (key)
 * bggzid (key)
+* bsn (key)
 * startdatum
 * einddatum
-* status
+* trajectstatus
 * ZVZ_initieel
 * ZVZ_actueel
+* productgroep
+* uzovi (moet eigenlijk van het dossier komen, maar geen goed bronbestand nu)
 * afsluitreden (niet in queries(verkeerd in DBCGGZuitvraag) , moet uit decl. bericht komen)
 
 ### Diagnoses
