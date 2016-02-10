@@ -61,8 +61,15 @@ kolomspecificatie_sessies <- cols(
 
 # inlezen ---------------------------------------------------------------------------------------------------------
 
-sessies <- read_csv2(file = paste0(root, "/", "Data", "/", "Sessie Brongegevens.csv"), 
-                     col_types = kolomspecificatie_sessies)
+# sessies <- read_csv2(file = paste0(root, "/", "Data", "/", "Sessie Brongegevens.csv"), 
+#                      col_types = kolomspecificatie_sessies)
+
+sessies <- read.csv2(file = paste0(root, "/", "Data", "/", "Sessie Brongegevens.csv"), 
+                     fileEncoding = "windows-1252", stringsAsFactors = FALSE)
+
+
+
+
 
 
 
@@ -76,6 +83,13 @@ sessies <- sessies %>%
              producttype = Product_Type, bggz_activiteit, sggz_activiteit, bedrijfscode, dossierid = Dossier_ID, 
              sessieid = Sessie_ID, productid = Product_ID)
 
+# sessies$behandelaar <- iconv(sessies$behandelaar, to = 'windows-1252')
+
+
+
+# Datums aanpassen --------------------------------------------------------
+
+sessies$sessiedatum <- dmy_hm(sessies$sessiedatum)
 
 
 # aanpassingen ----------------------------------------------------------------------------------------------------
@@ -97,3 +111,7 @@ sessies <- sessies %>%
 # Opslaan ---------------------------------------------------------------------------------------------------------
 
 save(sessies, file = paste0(root, "/", "Data", "/", "sessies.Rdata"))
+
+
+
+
